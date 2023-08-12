@@ -1,0 +1,34 @@
+{% extends "groups/group_base.html" %}
+
+{% block pregroup %}
+<div class="container">
+  <h1>{{group.name}}</h1>
+   <!--group.name is used to access the Group model's name as in the class based views the context dictionary is passed on containing all the info of the model (here, Group) (also the group name is lowercased by the Django) -->
+  <h2> Member Count: {{group.members.count}}</h2>
+
+  <div class="content">
+  	{% if user in group.members.all %}
+  		<a href="{% url 'groups:leave' slug=group.slug %}" class="btn btn-lg btn-warning"><span class="fa fa-times-circle-o"></span> Leave</a> <!--Glyphicons are icon fonts which you can use in your web projects. (link to Read:->  https://www.geeksforgeeks.org/what-are-glyphicons-in-bootstrap/)-->
+  	{% else %}
+  		<a href="{% url 'groups:join' slug=group.slug %}" class="btn btn-lg btn-warning"><span class="fa fa-check-circle-o"></span> Join</a>
+  	{% endif %}
+
+  </div>
+</div>
+{% endblock %}
+
+{% block group_content %}
+
+<div class="col-md-8">
+	{% if group.posts.count == 0 %}
+	<h2>No posts in this group yet!</h2>
+	<h2>😴</h2>
+	{% else %}
+
+		{% for post in group.posts.all %}
+			{% include "posts/_post.html" %} <!--the developers put(_xyz.html) to signify that this particular page is designed to be injected to another file for various purposes -->
+		{% endfor %}
+
+	{% endif %}
+</div>
+{% endblock %}
